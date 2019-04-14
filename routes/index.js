@@ -35,7 +35,7 @@ router.get('/endDemo', function(req, res, next) {
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         dataGenerator.endDemo()
-        result = {'result':1}
+        result = {'result':0}
         res.send(result)
 });
 router.get('/record', function(req, res, next) {

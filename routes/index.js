@@ -23,6 +23,19 @@ router.get('/getOneRealRecord', function(req, res, next) {
 	});
 });
 
+router.get('/startDemo', function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        dataGenerator.startDemo()
+        res.send("start demo!")
+});
+
+router.get('/endDemo', function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        dataGenerator.endDemo()
+        res.send("end demo!")
+});
 router.get('/record', function(req, res, next) {
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -49,6 +62,15 @@ router.get('/realrecordbytime', function(req, res, next) {
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
          dataGenerator.getRealRecordByTime(req.query.startDate, req.query.endDate, (d)  =>{
+                res.send(d);
+        });
+});
+router.get('/route', function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        console.log()
+        var waypoints = req.query.waypoints.split('|')
+        dataGenerator.route(waypoints, (d) =>{
                 res.send(d);
         });
 });

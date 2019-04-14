@@ -13,6 +13,17 @@ function dataGenerator() {
 	};
 	var count = 0;
 	var savedlocations = {};
+	var isDemo = 0;
+
+	var request = require("request")
+	var temperature = 0;
+	var tempUrl = "http://api.openweathermap.org/data/2.5/weather?id=4670666&appid=7194a64fb174b7c732dc1ae9a166d9ae";
+	request({
+		url: tempUrl,
+		json: true
+	    }, function (error, response, body) {
+		temperature = body['main']['temp']
+	    })
 	this.getData = function(name, seed) {
 
 		var data = vehicle[name];
@@ -65,8 +76,111 @@ function dataGenerator() {
                                         callback(d);
                                 });
                 });
-        };
+	};
+	this.getWeather = function(results){
+		for(var i = 0; i < results.length; ++i){
+			results[i]['temp'] = (temperature - 273.15) * 9 / 5 + 32
+			results[i]['tempTrend'] = 0
+			results[i]['snow'] = 0
+			results[i]['Frz.rain'] = 0
+			results[i]['sleet'] = 0
+			results[i]['condition'] = -1
+		}
+		console.log("is demo")
+		console.log(isDemo)
+		if(isDemo){
+			if(1){
+				for(var i = 0; i < results.length; ++i){
+					results[i]['temp'] = Math.random()*50 - 10
+					results[i]['tempTrend'] = Math.floor(Math.random()*100) % 2
+					if(results[i]['temp'] > 30 && results[i]['tempTrend'] == 1){
+						if(Math.floor(Math.random()*100) % 2 == 0){
+							results[i]['snow'] = 1
+							results[i]['condition'] = 0
+						}else{
+							results[i]['Frz.rain'] = 1
+							results[i]['condition'] = 1
+						}
+					}
+					if(results[i]['temp'] > 30 && results[i]['tempTrend'] == 0){
+						if(Math.floor(Math.random()*100) % 2== 0){
+							results[i]['snow'] = 1
+							results[i]['condition'] = 2
+						}else{
+							results[i]['Frz.rain'] = 1
+							results[i]['condition'] = 3
+						}
+					}
+					if(results[i]['temp'] > 25 && results[i]['temp'] < 30 && results[i]['tempTrend'] == 1){
+						if(Math.floor(Math.random()*100) % 2== 0){
+							results[i]['snow'] = 1
+							results[i]['condition'] = 4
+						}else{
+							results[i]['Frz.rain'] = 1
+							results[i]['condition'] = 5
+						}
+					}
+					if(results[i]['temp'] > 25 && results[i]['temp'] < 30 && results[i]['tempTrend'] == 0){
+						if(Math.floor(Math.random()*100) % 2== 0){
+							results[i]['snow'] = 1
+							results[i]['condition'] = 6
+						}else{
+							results[i]['Frz.rain'] = 1
+							results[i]['condition'] = 7
+						}
+					}
+					if(results[i]['temp'] > 20 && results[i]['temp'] < 25 && results[i]['tempTrend'] == 1){
+						if(Math.floor(Math.random()*100) % 2== 0){
+							results[i]['snow'] = 1
+							results[i]['condition'] = 8
+						}else{
+							results[i]['Frz.rain'] = 1
+							results[i]['condition'] = 8
+						}
+					}
+					if(results[i]['temp'] > 20 && results[i]['temp'] < 25 && results[i]['tempTrend'] == 0){
+						if(Math.floor(Math.random()*100) % 2== 0){
+							results[i]['snow'] = 1
+							results[i]['condition'] = 9
+						}else{
+							results[i]['Frz.rain'] = 1
+							results[i]['condition'] = 10
+						}
+					}
+					if(results[i]['temp'] > 15 && results[i]['temp'] < 20 && results[i]['tempTrend'] == 1){
+						if(Math.floor(Math.random()*100) % 2== 0){
+							results[i]['snow'] = 1
+							results[i]['condition'] = 11
+						}else{
+							results[i]['Frz.rain'] = 1
+							results[i]['condition'] = 12
+						}
+					}
+					if(results[i]['temp'] > 15 && results[i]['temp'] < 20 && results[i]['tempTrend'] == 0){
+						if(Math.floor(Math.random()*100) % 2== 0){
+							results[i]['snow'] = 1
+							results[i]['condition'] = 13
+						}else{
+							results[i]['Frz.rain'] = 1
+							results[i]['condition'] = 13
+						}
+					}
+					if(results[i]['temp'] > 0 && results[i]['temp'] < 15){
+						results[i]['snow'] = 1
+						results[i]['condition'] = 14
+					}
+					if(results[i]['temp'] < 0){
+						results[i]['snow'] = 1
+						results[i]['condition'] = 15
+					}
+				}
+				
+			}
+		}
+
+	};
 	  this.getOneRealRecord = function(startCounts, range, callback) {
+		var self = this
                 MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
                                 if (err) throw err;
                                 var dbo = db.db("realRecord");
@@ -105,6 +219,9 @@ function dataGenerator() {
 						results.push(result);
 					}	
 					count += 4;
+					
+					self.getWeather(results);
+	
 					callback(results);
                                 });
 		});
@@ -119,7 +236,40 @@ function dataGenerator() {
                                         callback(d);
                                 });
                 });
-        };
+	};
+	this.startDemo = function(){
+		isDemo = 1
+	};
+	this.endDemo = function(){
+		isDemo = 0
+	};
+	this.route = function(waypoints, callback){
+		var routeUrl = 'https://maps.googleapis.com/maps/api/directions/json?'
+		routeUrl += 'origin=' + waypoints[0]
+		routeUrl += '&destination=' + waypoints[1]
+		if(waypoints.length >= 3){
+			routeUrl += '&waypoints=' 
+		}
+		for(var i = 2; i < waypoints.length; ++i){
+			routeUrl += '|via:' + waypoints[i]
+		}
+		routeUrl += '&key=AIzaSyDr__FR7kRgNkkgw-k8boWw5t5x0ehR9nY'
+		console.log(routeUrl)
+		request({
+			url: routeUrl,
+			json: true
+		    }, function (error, response, body) {
+			console.log(body)
+			steps = body['routes'][0]['legs'][0]['steps']
+			points = []
+			points.push(body['routes'][0]['legs'][0]['start_location'])
+			console.log(body['routes'][0]['legs'][0])
+			for(var i = 1; i < steps.length; ++i){
+				points.push(steps[i]['end_location'])
+			}
+			callback(points)
+		    })
+	};
 
 };
 module.exports = dataGenerator;

@@ -173,6 +173,10 @@ function dataGenerator() {
 						results[i]['snow'] = 1
 						results[i]['condition'] = 15
 					}
+					result[i]['temp'] == result[0]['temp']
+					result[i]['snow'] == result[0]['snow']
+					result[i]['Frz.rain'] == result[0]['Frz.rain']
+					result[i]['Frz.condition'] == result[0]['Frz.condition']
 				}
 				
 			}

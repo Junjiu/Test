@@ -276,7 +276,10 @@ function dataGenerator() {
 			for(var i = 1; i < steps.length; ++i){
 				points.push(steps[i]['end_location'])
 			}
-			callback(points)
+			result = {}
+			result['points'] = points
+			result['distance'] = body['routes'][0]['legs'][0]['distance']
+			callback(result)
 		    })
 	};
 

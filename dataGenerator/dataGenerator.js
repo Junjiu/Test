@@ -173,12 +173,17 @@ function dataGenerator() {
 						results[i]['snow'] = 1
 						results[i]['condition'] = 15
 					}
-					results[i]['temp'] == result[0]['temp']
-					results[i]['snow'] == result[0]['snow']
-					results[i]['Frz.rain'] == result[0]['Frz.rain']
-					results[i]['Frz.condition'] == result[0]['Frz.condition']
 				}
-				
+				for(var i = 1; i < results.length; ++i){
+
+
+					results[i]['temp'] = results[0]['temp']
+					results[i]['tempTrend'] = results[0]['tempTrend']
+					results[i]['snow'] = results[0]['snow']
+					results[i]['Frz.rain'] = results[0]['Frz.rain']
+					results[i]['sleet'] = results[0]['sleet']
+					results[i]['condition'] = results[0]['condition']
+				}
 			}
 		}
 

@@ -44,6 +44,10 @@ describe('DataGenerator', function() {
         dataGenerator.endDemo();
         assert.equal(dataGenerator.getWeather([]), 1);
       }),
+      it('check if can get demo weather', function() {
+        dataGenerator.startDemo();
+        assert.equal(dataGenerator.getWeather([]), 1);
+      }),
       it('check if can one real record', function() {
         assert.equal(dataGenerator.getOneRealRecord(0,0,()=>{}), 1);
       }),

@@ -10,6 +10,7 @@ function dataGenerator() {
 		vehicle[name] = {};
 		vehicle[name]['Lat'] = 42;
 		vehicle[name]['Long'] = -91;
+		return 1;
 	};
 	var count = 0;
 	var savedlocations = {};
@@ -23,7 +24,10 @@ function dataGenerator() {
 		json: true
 	    }, function (error, response, body) {
 		temperature = body['main']['temp']
-	    })
+		})
+	this.demo = function(){
+		return isDemo;
+	},
 	this.getData = function(name, seed) {
 
 		var data = vehicle[name];
@@ -45,6 +49,7 @@ function dataGenerator() {
 		data['Conveyor'] = Math.random()  *50 * seed;
 		data['Spinner'] = Math.random()  *50 * seed;
 		data['Prewet'] = Math.random()  *50 * seed;
+		data['success'] = 1
 		vehicle[name] = data;
 		MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
 			if (err) throw err;
@@ -57,6 +62,7 @@ function dataGenerator() {
 	       });
 	       return data;
 	};
+
 	this.getRecord = function(callback) {
 		MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
 				if (err) throw err;
@@ -66,7 +72,9 @@ function dataGenerator() {
 					callback(d);
 				});	
 		});
+		return 1;
 	};
+
 	 this.getRealRecord = function(callback) {
                 MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
                                 if (err) throw err;
@@ -75,7 +83,8 @@ function dataGenerator() {
                                         db.close();
                                         callback(d);
                                 });
-                });
+				});
+				return 1;
 	};
 	this.getWeather = function(results){
 		for(var i = 0; i < results.length; ++i){
@@ -86,7 +95,6 @@ function dataGenerator() {
 			results[i]['sleet'] = 0
 			results[i]['condition'] = -1
 		}
-		console.log("is demo")
 		console.log(isDemo)
 		if(isDemo){
 			if(1){
@@ -186,7 +194,7 @@ function dataGenerator() {
 				}
 			}
 		}
-
+		return 1;
 	};
 	  this.getOneRealRecord = function(startCounts, range, callback) {
 		var self = this
@@ -234,6 +242,7 @@ function dataGenerator() {
 					callback(results);
                                 });
 		});
+		return 1;
         };
 	 this.getRealRecordByTime = function( startDate, endDate, callback) {
                 MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
@@ -244,7 +253,8 @@ function dataGenerator() {
                                         db.close();
                                         callback(d);
                                 });
-                });
+				});
+				return 1;
 	};
 	this.startDemo = function(){
 		isDemo = 1
